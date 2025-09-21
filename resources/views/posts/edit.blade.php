@@ -19,8 +19,8 @@
                         {{html()->text('title', $post->title)->placeholder('Title') }} 
                         {{html()->form('body', 'Body')}}
                         {{html()->textarea('body', $post->body)->class('form-control')->placeholder('Body Text') }} 
-                            @if($posts->thumbnail)
-                        <img src="/thumbnails/{{$page->thumbnail}}" width="75px" height="auto" />
+                            @if($post->thumbnail)
+                        <img src="/thumbnails/{{$post->thumbnail}}" width="75px" height="auto" />
                             @endif
                         
                         <div class="form-group">

@@ -17,7 +17,8 @@ use Illuminate\Support\Facades\File;
 use Intervention\Image\Laravel\Facades\Image;
 /* ImageManager Resize Proportional */
 use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Imagick\Driver;
+// use Intervention\Image\Drivers\Imagick\Driver; 
+use Intervention\Image\Drivers\Gd\Driver;
 
 class PostsController extends Controller
 { 
@@ -50,6 +51,7 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
+        $manager = new ImageManager(new Driver());
         $validated = $request->validate([ 
             'title' => 'required',
             'body' => 'required',
@@ -69,9 +71,16 @@ class PostsController extends Controller
             $fileNameToStore= $filename.'_'.time().'.'.$extension;  
             // Upload Image
             $path = $request->file('cover_image')->storeAs('original', $fileNameToStore); 
-
-            $cover_image = $request->file('cover_image'); 
-            $tn = Image::read($cover_image)->resize(80, 80);
+            
+            $cover_image = $request->file('cover_image');
+            $tn = $manager->read($cover_image);
+            $tn->scale(width: 300); 
+             
+            // $tn = Image::make($cover_image);
+            // $tn->widen(150);
+            // $tn = Image::read($cover_image)->widen(150);
+            // resize(150, null, function ($constraint) { $constraint->aspectRatio(); });
+            // $tn = Image::read($cover_image)->resize(80, 80);
             $randomizer = Str::random() . '.' . $cover_image->getClientOriginalExtension();
             $thumbnailer = $tn->encodeByExtension($cover_image->getClientOriginalExtension(), quality:70);
             Storage::put('thumbnails/'.$randomizer, $thumbnailer);  
@@ -88,6 +97,8 @@ $post->body = $request->input('body');
 $post->user_id = auth()->user()->id;
 $post->save(); 
 // $post->cover_image = $fileNameToStore;  
+
+    return redirect('/posts')->with('success', 'Post Created');
  }   
     /**
      * Display the specified resource.

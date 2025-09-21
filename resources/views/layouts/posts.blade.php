@@ -1,3 +1,10 @@
+<?php
+if (extension_loaded('imagick')) {
+    echo "Imagick extension is loaded.";
+} else {
+    echo "Imagick extension is not loaded.";
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

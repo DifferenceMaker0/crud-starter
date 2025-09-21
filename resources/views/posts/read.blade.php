@@ -7,7 +7,11 @@
 <div>
     <a href="/posts" class="btn btn-default">Go Back(static declaration)</a>
 <div>
-
+                        @if($post->cover_image)
+                            <img class="img-fluid" src="/original/{{$post->cover_image}}" alt="{{$post->original_filename}}"> 
+                        @else 
+                            <p>No Cover Image</p>
+                        @endif 
 <div class="d-flex justify-content-center align-items-center flex-column">
     <h3 class="mb-0"> Featured </h3>
     <div class="card" style="width: 18rem;">
